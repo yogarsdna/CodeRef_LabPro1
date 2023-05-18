@@ -1,10 +1,5 @@
-# Final Project - Network Programming
+# Lab Project 1 - Code Refactoring
 
-Group Member: 
+This is a repository for the Code Refactoring course for Lab Project 1.
 
-- Mukhoram Dimasputra B - 05111942000006
-- Gede Yoga Arisudana - 05111942000009
-- Muhammad Rafi Hayla Arifa - 05111942000014
-- Salma Rahma Lailia - 05111942000016
-- Farah Dhiah Qorirah - 05111942000018
-- Khairi Wiryawan S - 05111942000023
+This project was made by me and my friends back at Institut Teknologi Sepuluh Nopember, Surabaya, for our course named Network Programming, where we are assigned to make a game, and me and my friends made a rock, paper, and scissors game.

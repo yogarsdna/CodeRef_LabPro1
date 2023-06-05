@@ -64,10 +64,22 @@ def start_server():
 
 #Stop server function
 def stop_server():
-    global server
+    global server, clients, clients_names
     btnStart.config(state=tk.NORMAL)
     btnStop.config(state=tk.DISABLED)
+
+    # Close all client connections
+    for client in clients:
+        client.close()
+
+    # Clear the client lists
+    clients.clear()
+    clients_names.clear()
+
+    # Close the server socket
     server.close()
+
+    update_client_names_display(clients_names)
 
 #Accept client requests
 def accept_clients(the_server, y):

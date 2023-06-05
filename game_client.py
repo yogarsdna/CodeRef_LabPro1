@@ -212,6 +212,8 @@ def receive_message_from_server(sck, m):
         from_server = sck.recv(4096).decode()
 
         if not from_server: 
+            print("Disconnected from the server.")
+            sck.close()
             break
 
         if from_server.startswith("welcome"):

@@ -4,6 +4,9 @@ import tkinter as tk
 from tkinter import PhotoImage
 from tkinter import messagebox
 from time import sleep
+import unittest
+import subprocess
+import time
 
 #Main Game Window 
 window_main = tk.Tk()
@@ -288,3 +291,16 @@ def receive_message_from_server(sck, m):
     sck.close()
 
 window_main.mainloop()
+
+class ClientTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.client_process = subprocess.Popen(['python', 'client.py'])
+        time.sleep(1)  # Give the client some time to start
+
+    def tearDown(self):
+        self.client_process.terminate()
+        self.client_process.wait()
+
+if __name__ == '__main__':
+    unittest.main()

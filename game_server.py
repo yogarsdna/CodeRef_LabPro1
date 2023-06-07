@@ -2,6 +2,9 @@ import tkinter as tk
 import socket
 import threading
 from time import sleep
+import unittest
+import subprocess
+import time
 
 #Initialize server
 server = None
@@ -164,3 +167,16 @@ def update_client_names_display(name_list):
     tkDisplay.config(state=tk.DISABLED)
 
 window.mainloop()
+
+class ServerTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.server_process = subprocess.Popen(['python', 'server.py'])
+        time.sleep(1)  # Give the server some time to start
+
+    def tearDown(self):
+        self.server_process.terminate()
+        self.server_process.wait()
+
+if __name__ == '__main__':
+    unittest.main()

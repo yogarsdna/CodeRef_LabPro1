@@ -183,14 +183,11 @@ def count_down(my_timer, nothing):
 #Make choice function to let the client's know which move they pick
 def choice(arg):
     global your_choice, client, game_round
-    displayed_choice = arg
-    if displayed_choice == "rock":
-        displayed_choice = "paper"
-    lbl_your_choice["text"] = "You: " + displayed_choice
     your_choice = arg
+    lbl_your_choice["text"] = "You: " + your_choice
 
     if client:
-        str_data = "Game_Round" + str(game_round) + your_choice
+        str_data = "Game_Round"+str(game_round)+your_choice
         client.send(str_data.encode())
         enable_disable_buttons("disable")
         

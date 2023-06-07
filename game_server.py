@@ -86,21 +86,27 @@ def stop_server():
     window.destroy()
 
 #Accept client requests
+client_threads = []
+
 def accept_clients(the_server, y):
     while True:
         if len(clients) < 2:
             client, addr = the_server.accept()
             clients.append(client)
 
-            #Use a thread so as not to clog the gui thread
-            threading._start_new_thread(send_receive_client_message, (client, addr))
+            # Use a thread to handle the client connection
+            client_thread = threading.Thread(target=send_receive_client_message, args=(client, addr))
+            client_thread.start()
+
+            # Store the thread object
+            client_threads.append(client_thread)
 
 def send_receive_client_message(client_connection, client_ip_addr):
     global server, client_name, clients, player_data, player0, player1
 
     client_msg = " "
 
-    #Send welcome message to client
+    # Send welcome message to client
     client_name = client_connection.recv(4096).decode()
     if len(clients) < 2:
         client_connection.send("welcome1".encode())
@@ -108,21 +114,26 @@ def send_receive_client_message(client_connection, client_ip_addr):
         client_connection.send("welcome2".encode())
 
     clients_names.append(client_name)
-    update_client_names_display(clients_names) 
+    update_client_names_display(clients_names)
 
     if len(clients) > 1:
         sleep(1)
 
-        #Send opponent name
+        # Send opponent name
         clients[0].send(("opponent_name$" + clients_names[1]).encode())
         clients[1].send(("opponent_name$" + clients_names[0]).encode())
-    
-    while True:
-        data = client_connection.recv(4096).decode()
-        if not data: break
 
-        #Get the player choice from received data
-        player_choice = data[11:len(data)]
+    while True:
+        try:
+            data = client_connection.recv(4096).decode()
+        except ConnectionAbortedError:
+            break
+
+        if not data:
+            break
+
+        # Get the player choice from received data
+        player_choice = data[11:]
 
         msg = {
             "choice": player_choice,
@@ -133,22 +144,27 @@ def send_receive_client_message(client_connection, client_ip_addr):
             player_data.append(msg)
 
         if len(player_data) == 2:
-            #Send player 1 choice to player 2 and vice versa
+            # Send player 1 choice to player 2 and vice versa
             dataToSend0 = "$opponent_choice" + player_data[1].get("choice")
             dataToSend1 = "$opponent_choice" + player_data[0].get("choice")
             player_data[0].get("socket").send(dataToSend0.encode())
             player_data[1].get("socket").send(dataToSend1.encode())
-        
 
             player_data = []
 
-    #Find the client index then remove from both lists(client name list and connection list)
+    # Find the client index then remove from both lists
     idx = get_client_index(clients, client_connection)
     del clients_names[idx]
     del clients[idx]
+
+    # Find the thread index then remove from the list
+    thread_idx = get_client_index(client_threads, threading.current_thread())
+    del client_threads[thread_idx]
+
+    # Close the client connection
     client_connection.close()
 
-    update_client_names_display(clients_names)  
+    update_client_names_display(clients_names)
 
 def get_client_index(client_list, curr_client):
     idx = 0

@@ -24,7 +24,8 @@ class ClientTestCase(unittest.TestCase):
         displayed_choice = game_client.lbl_your_choice["text"]
 
         # Check if the displayed choice matches the expected value
-        self.assertTrue(displayed_choice == "You: paper" or displayed_choice == "You: rock")
+        expected_choice = "You: paper"
+        self.assertTrue(displayed_choice == expected_choice)
 
 if __name__ == '__main__':
     unittest.main()

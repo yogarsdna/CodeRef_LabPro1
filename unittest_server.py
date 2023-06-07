@@ -17,12 +17,18 @@ class ServerTestCase(unittest.TestCase):
         # Create an instance of the server
         test_server = game_server.Server()
 
-        # Set the displayed choice directly
-        displayed_choice = "rock"
-        test_server.displayed_choice = displayed_choice
+        # Simulate the client choosing "rock"
+        client_choice = "rock"
+
+        # Simulate the server receiving the client's choice
+        test_server.handle_client_choice(client_choice)
+
+        # Get the displayed choice from the server
+        displayed_choice = test_server.get_displayed_choice()
 
         # Check if the displayed choice matches the expected value
-        self.assertTrue(displayed_choice == "You: rock")
+        expected_choice = "paper"
+        self.assertTrue(displayed_choice == expected_choice)
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,9 +4,6 @@ import tkinter as tk
 from tkinter import PhotoImage
 from tkinter import messagebox
 from time import sleep
-import unittest
-import subprocess
-import time
 
 #Main Game Window 
 window_main = tk.Tk()
@@ -27,6 +24,7 @@ opponent_choice = ""
 TOTAL_NO_OF_ROUNDS = 3
 your_score = 0
 opponent_score = 0
+test_displayed_choice = None
 
 #Top frame consisting of label name and a button widget 
 top_welcome_frame= tk.Frame(window_main)
@@ -158,6 +156,12 @@ def connect():
         lbl_your_name["text"] = "Name: " + your_name
         connect_to_server(your_name)
 
+def stop_client():
+    global client, window_main
+    if client:
+        client.close()
+    window_main.destroy()
+
 #Make count down function for the timer
 def count_down(my_timer, nothing):
     global game_round
@@ -214,17 +218,17 @@ def receive_message_from_server(sck, m):
     while True:
         from_server = sck.recv(4096).decode()
 
-        if not from_server: 
+        if not from_server:
             print("Disconnected from the server.")
             sck.close()
+
+            messagebox.showinfo("Server Disconnected", "The server has closed the connection.")
+            stop_client()  # Call the stop_client function to close the client GUI window
             break
 
-        if from_server.startswith("welcome"):
-            if from_server == "welcome1":
-                lbl_welcome["text"] = ("Welcome " + your_name + "! Waiting for other player")
-            elif from_server == "welcome2":
-                lbl_welcome["text"] = ("Welcome " + your_name + "! Game will start soon")
-            lbl_line_server.pack()
+        if from_server == "SERVER_SHUTDOWN":
+            messagebox.showinfo("Server Shutdown", "The server has stopped. Closing the client.")
+            stop_client()  # Call the stop_client function to close the client GUI window
 
         elif from_server.startswith("opponent_name$"):
             opponent_name = from_server.replace("opponent_name$", "")
@@ -291,16 +295,3 @@ def receive_message_from_server(sck, m):
     sck.close()
 
 window_main.mainloop()
-
-class ClientTestCase(unittest.TestCase):
-
-    def setUp(self):
-        self.client_process = subprocess.Popen(['python', 'client.py'])
-        time.sleep(1)  # Give the client some time to start
-
-    def tearDown(self):
-        self.client_process.terminate()
-        self.client_process.wait()
-
-if __name__ == '__main__':
-    unittest.main()

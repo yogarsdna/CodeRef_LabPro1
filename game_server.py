@@ -2,9 +2,6 @@ import tkinter as tk
 import socket
 import threading
 from time import sleep
-import unittest
-import subprocess
-import time
 
 #Initialize server
 server = None
@@ -68,12 +65,15 @@ def start_server():
 #Stop server function
 def stop_server():
     global server, clients, clients_names
-    btnStart.config(state=tk.NORMAL)
-    btnStop.config(state=tk.DISABLED)
 
-    # Close all client connections
+    # Send shutdown message to each client
+    shutdown_message = "SERVER_SHUTDOWN"
     for client in clients:
-        client.close()
+        try:
+            client.send(shutdown_message.encode())
+            client.close()
+        except:
+            pass
 
     # Clear the client lists
     clients.clear()
@@ -82,7 +82,8 @@ def stop_server():
     # Close the server socket
     server.close()
 
-    update_client_names_display(clients_names)
+    # Close the GUI window
+    window.destroy()
 
 #Accept client requests
 def accept_clients(the_server, y):
@@ -167,16 +168,3 @@ def update_client_names_display(name_list):
     tkDisplay.config(state=tk.DISABLED)
 
 window.mainloop()
-
-class ServerTestCase(unittest.TestCase):
-
-    def setUp(self):
-        self.server_process = subprocess.Popen(['python', 'server.py'])
-        time.sleep(1)  # Give the server some time to start
-
-    def tearDown(self):
-        self.server_process.terminate()
-        self.server_process.wait()
-
-if __name__ == '__main__':
-    unittest.main()

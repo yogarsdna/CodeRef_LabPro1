@@ -1,31 +1,35 @@
 import unittest
-import subprocess
-import time
-import game_client
+from game_client import Client
 
-class ClientTestCase(unittest.TestCase):
+class MockGUI:
+    def __init__(self):
+        self.display = ""
+    
+    def set_display(self, value):
+        self.display = value
+    
+    def get_display(self):
+        return self.display
 
-    def setUp(self):
-        self.client_process = subprocess.Popen(['python', 'game_client.py'])
-        time.sleep(1)  # Give the client some time to start
-
-    def tearDown(self):
-        self.client_process.terminate()
-        self.client_process.wait()
-
-    def test_choice_display(self):
-        # Simulate the client choosing "rock"
-        game_client.your_choice = "rock"
-
-        # Call the choice function to update the displayed choice
-        game_client.choice("paper")
-
-        # Get the displayed choice from the GUI
-        displayed_choice = game_client.lbl_your_choice["text"]
-
-        # Check if the displayed choice matches the expected value
-        expected_choice = "You: paper"
-        self.assertTrue(displayed_choice == expected_choice)
+class TestClient(unittest.TestCase):
+    def test_gui_display(self):
+        client = Client()
+        client.gui = MockGUI()  # Replace the client's GUI with the MockGUI
+        
+        # Start the game
+        client.start_game()
+        
+        # Run the game for 3 rounds
+        for _ in range(3):
+            # Simulate player choosing "rock"
+            client.make_move("rock")
+            
+            # Verify that the GUI displays "paper"
+            display = client.gui.get_display()
+            self.assertTrue(display == "paper")
+        
+        # Stop the game
+        client.stop_game()
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,34 +1,24 @@
 import unittest
-import subprocess
-import time
-import game_server
+from game_server import Server
 
-class ServerTestCase(unittest.TestCase):
-
-    def setUp(self):
-        self.server_process = subprocess.Popen(['python', 'game_server.py'])
-        time.sleep(1)  # Give the server some time to start
-
-    def tearDown(self):
-        self.server_process.terminate()
-        self.server_process.wait()
-
-    def test_displayed_choice(self):
-        # Create an instance of the server
-        test_server = game_server.Server()
-
-        # Simulate the client choosing "rock"
-        client_choice = "rock"
-
-        # Simulate the server receiving the client's choice
-        test_server.handle_client_choice(client_choice)
-
-        # Get the displayed choice from the server
-        displayed_choice = test_server.get_displayed_choice()
-
-        # Check if the displayed choice matches the expected value
-        expected_choice = "paper"
-        self.assertTrue(displayed_choice == expected_choice)
+class TestServer(unittest.TestCase):
+    def test_game_logic(self):
+        server = Server()
+        
+        # Start the game
+        server.start_game()
+        
+        # Run the game for 3 rounds
+        for _ in range(3):
+            # Simulate player choosing "rock"
+            server.receive_move("rock")
+            
+            # Verify that the server's response is "paper"
+            response = server.get_response()
+            self.assertTrue(response == "paper")
+        
+        # Stop the game
+        server.stop_game()
 
 if __name__ == '__main__':
     unittest.main()

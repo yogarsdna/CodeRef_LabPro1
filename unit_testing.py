@@ -51,6 +51,10 @@ class UnitTest(unittest.TestCase):
     def test_turn_button_your_enable(self):
         result = turn_button(True, True)
         self.assertTrue(result)
+    
+    def test_turn_button_not_disable(self):
+        result = turn_button(False, False)
+        self.assertTrue(result)
 
     def test_client_name_client1_client2(self):
         result = client_name("client 1", "Yog", "Zulu", "Name: Zulu")

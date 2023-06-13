@@ -4,7 +4,7 @@ def pick_rps(picked, output):
     if output == picked :
         return True
     
-    else :
+    else:
         return False
     
 def turn_button(your_turn, button):
@@ -14,17 +14,18 @@ def turn_button(your_turn, button):
     elif your_turn == False and button == False:
         return True
     
-    else :
+    else:
         return False
     
 def client_name(state, client1_name, client2_name, greetings):
-    if state == "client 1" and greetings == "Hello " + client1_name:
+    if state == "client 1" and greetings == "Name: " + client1_name:
         return True
     
-    elif state == "client 2" and greetings == "Hello " + client2_name:
+    elif state == "client 2" and greetings == "Name: " + client2_name:
         return True
     
-    else : return False        
+    else:
+        return False        
         
 
 class UnitTest(unittest.TestCase):

@@ -10,3 +10,7 @@ Progress 1:
 
 Progress 2:
 - Create Unit tests for methods with bad code, which were found in Laboratory Project 1.
+
+Progress 3:
+- Refactor the shortcomings that were found during Laboratory Project 2.
+- For each commit, you must add a description of the procedure.

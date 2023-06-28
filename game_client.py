@@ -107,32 +107,36 @@ btn_paper.grid(row=0, column=1)
 btn_scissors.grid(row=0, column=2)
 button_frame.pack(side=tk.BOTTOM)
 
+class GameChoice:
+    ROCK = "rock"
+    PAPER = "paper"
+    SCISSORS = "scissors"
+
 #Rock, paper, scissors logic
 def game_logic(you, opponent):
     winner = ""
-    rock = "rock"
-    paper = "paper"
-    scissors = "scissors"
     player0 = "you"
     player1 = "opponent"
+    choices = GameChoice()
 
-    if you == opponent:
-        winner = "draw"
-    elif you == rock:
-        if opponent == paper:
+    if you == choices.ROCK:
+        if opponent == choices.PAPER:
             winner = player1
-        else:
+        elif opponent == choices.SCISSORS:
             winner = player0
-    elif you == scissors:
-        if opponent == rock:
+
+    elif you == choices.PAPER:
+        if opponent == choices.ROCK:
+            winner = player0
+        elif opponent == choices.SCISSORS:
             winner = player1
-        else:
-            winner = player0
-    elif you == paper:
-        if opponent == scissors:
+            
+    elif you == choices.SCISSORS:
+        if opponent == choices.ROCK:
             winner = player1
-        else:
+        elif opponent == choices.PAPER:
             winner = player0
+
     return winner
 
 #Make buttons

@@ -136,15 +136,16 @@ def game_logic(you, opponent):
     return winner
 
 #Make buttons
+def set_button_state(state):
+    btn_rock.config(state=state)
+    btn_paper.config(state=state)
+    btn_scissors.config(state=state)
+
 def enable_disable_buttons(todo):
     if todo == "disable":
-        btn_rock.config(state=tk.DISABLED)
-        btn_paper.config(state=tk.DISABLED)
-        btn_scissors.config(state=tk.DISABLED)
+        set_button_state(tk.DISABLED)
     else:
-        btn_rock.config(state=tk.NORMAL)
-        btn_paper.config(state=tk.NORMAL)
-        btn_scissors.config(state=tk.NORMAL)
+        set_button_state(tk.NORMAL)
 
 #Connect client's name
 def connect():

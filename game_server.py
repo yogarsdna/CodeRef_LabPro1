@@ -104,6 +104,9 @@ def accept_clients(the_server, y):
 def send_opponent_name(client, opponent_name):
     client.send(("opponent_name$" + opponent_name).encode())
 
+def send_data(socket, data):
+    socket.send(data.encode())
+
 def send_receive_client_message(client_connection, client_ip_addr):
     global server, client_name, clients, player_data, player0, player1
 
@@ -150,8 +153,12 @@ def send_receive_client_message(client_connection, client_ip_addr):
             # Send player 1 choice to player 2 and vice versa
             dataToSend0 = "$opponent_choice" + player_data[1].get("choice")
             dataToSend1 = "$opponent_choice" + player_data[0].get("choice")
-            player_data[0].get("socket").send(dataToSend0.encode())
-            player_data[1].get("socket").send(dataToSend1.encode())
+            
+            player0_socket = player_data[0].get("socket")
+            player1_socket = player_data[1].get("socket")
+
+            send_data(player0_socket, dataToSend0)
+            send_data(player1_socket, dataToSend1)
 
             player_data = []
 

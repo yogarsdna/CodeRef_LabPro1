@@ -195,16 +195,21 @@ def count_down(my_timer, nothing):
     lbl_round["text"] = "Round - " + str(game_round)
     lbl_final_result["text"] = ""
 
+def update_your_choice(choice):
+    lbl_your_choice["text"] = "You: " + choice
+
+def send_choice_to_server(choice, game_round, client):
+    if client:
+        str_data = "Game_Round" + str(game_round) + choice
+        client.send(str_data.encode())
+        enable_disable_buttons("disable")
+
 #Make choice function to let the client's know which move they pick
 def choice(arg):
     global your_choice, client, game_round
     your_choice = arg
-    lbl_your_choice["text"] = "You: " + your_choice
-
-    if client:
-        str_data = "Game_Round"+str(game_round)+your_choice
-        client.send(str_data.encode())
-        enable_disable_buttons("disable")
+    update_your_choice(your_choice)
+    send_choice_to_server(your_choice, game_round, client)
         
 #Connect to the server
 def connect_to_server(name):

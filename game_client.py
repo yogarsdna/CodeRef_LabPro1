@@ -151,6 +151,16 @@ def enable_disable_buttons(todo):
     else:
         set_button_state(tk.NORMAL)
 
+def update_gui_name(name):
+    lbl_your_name["text"] = "Name: " + name
+    # Disable/enable relevant widgets based on the connection state
+    if name:
+        ent_name.config(state=tk.DISABLED)
+        btn_connect.config(state=tk.DISABLED)
+    else:
+        ent_name.config(state=tk.NORMAL)
+        btn_connect.config(state=tk.NORMAL)
+
 #Connect client's name
 def connect():
     global your_name
@@ -158,7 +168,7 @@ def connect():
         tk.messagebox.showerror(title="ERROR!!!", message="You MUST enter your first name <e.g. John>")
     else:
         your_name = ent_name.get()
-        lbl_your_name["text"] = "Name: " + your_name
+        update_gui_name(your_name)
         connect_to_server(your_name)
 
 def stop_client():

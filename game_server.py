@@ -101,6 +101,9 @@ def accept_clients(the_server, y):
             # Store the thread object
             client_threads.append(client_thread)
 
+def send_opponent_name(client, opponent_name):
+    client.send(("opponent_name$" + opponent_name).encode())
+
 def send_receive_client_message(client_connection, client_ip_addr):
     global server, client_name, clients, player_data, player0, player1
 
@@ -115,13 +118,13 @@ def send_receive_client_message(client_connection, client_ip_addr):
 
     clients_names.append(client_name)
     update_client_names_display(clients_names)
-
+    
     if len(clients) > 1:
         sleep(1)
 
         # Send opponent name
-        clients[0].send(("opponent_name$" + clients_names[1]).encode())
-        clients[1].send(("opponent_name$" + clients_names[0]).encode())
+        send_opponent_name(clients[0], clients_names[1])
+        send_opponent_name(clients[1], clients_names[0])
 
     while True:
         try:
